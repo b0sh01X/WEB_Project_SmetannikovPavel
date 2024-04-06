@@ -1,0 +1,15 @@
+{% extends "baze.html" %}
+
+{% block content %}
+<h1>Рецепты:</h1>
+<h4>Сортировка: {{ sorti }}</h4>
+{% for i in request %}
+    <div class="alert alert-dark" role="alert">
+        <h1>{{ i[1] }}</h1>
+        <div class="alert alert-info" role="alert">
+            {{ i[2] }}
+        </div>
+        <p>Автор: {{ i[4] }}</p>
+    </div>
+{% endfor %}
+{% endblock %}
