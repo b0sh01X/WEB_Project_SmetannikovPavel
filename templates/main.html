@@ -5,11 +5,11 @@
 <h4>Сортировка: {{ sorti }}</h4>
 {% for i in request %}
     <div class="alert alert-dark" role="alert">
-        <h1>{{ i[1] }}</h1>
+        <h1>{{ i.name }}</h1>
         <div class="alert alert-info" role="alert">
-            {{ i[2] }}
+            {{ i.text }}
         </div>
-        <p>Автор: {{ i[4] }}</p>
+        <p>Автор: {{ i.autor }}</p>
     </div>
 {% endfor %}
 {% endblock %}

@@ -17,9 +17,8 @@ def index():
 
 @app.route('/main/<s>')
 def glav(s):
-    bd = sqlite3.connect('db/baze.db')
-    request = bd.cursor().execute('SELECT * FROM recept').fetchall()
-    bd.close()
+    db_sess = create_session()
+    request = db_sess.query(Recept).all()
     if s == 'old':
         sorti = 'Более старые'
     elif s == 'new':
