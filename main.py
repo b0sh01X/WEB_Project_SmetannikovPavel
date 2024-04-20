@@ -49,7 +49,7 @@ def reqister():
         db_sess = create_session()
         if db_sess.query(User).filter(User.login == form.login.data).first():
             return render_template('register.html', title='Регистрация', form=form,
-                                   message="This user already exists")
+                                   message="Пользователь уже зарегистрирован")
         user = User(
             name=form.name.data,
             login=form.login.data,
@@ -72,7 +72,6 @@ def login():
             return redirect('/')
         return render_template('login.html', title='Авторизация', message='Неправильный логин или пароль', form=form)
     return render_template('login.html', title='Авторизация', form=form)
-
 
 
 @app.errorhandler(404)
