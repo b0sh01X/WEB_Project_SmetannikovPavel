@@ -13,4 +13,6 @@ class Recept(SqlAlchemyBase):
     text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     reg = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     autor = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
+    catalog_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("catalog.id"))
     user = orm.relationship('User')
+    catalog = orm.relationship('Catalog')

@@ -22,8 +22,14 @@
           <a class="nav-link" href="/help">Помощь</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/login">Вход/Регистрация</a>
-        </li>
+        {% if current_user.is_authenticated %}
+            <p>
+                <li class="nav-item"><a class="btn btn-info" href="/profile">{{ current_user.name }}</a></li>
+                <li class="nav-item"><a class="btn btn-danger" href="/logout">Выход</a></li>
+            </p>
+        {% else %}
+            <a class="btn btn-warning" href="/login">Вход/Регистрация</a>
+        {% endif %}
       </ul>
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

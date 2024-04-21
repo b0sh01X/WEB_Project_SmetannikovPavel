@@ -74,6 +74,18 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
+
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('err404.html', title='Не найдено'), 404
