@@ -5,6 +5,7 @@ from data.recept import Recept
 from data.users import User
 from forms.register import RegisterForm
 from forms.login import LoginForm
+from forms.search import SearchForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -84,6 +85,25 @@ def logout():
 @app.route('/profile')
 def profile():
     return render_template('profile.html')
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    form = SearchForm()
+    if form.validate_on_submit():
+        return redirect(f'/search/{form.req.data}')
+    return render_template('search.html', title='Поиск', form=form)
+
+
+@app.route('/search/<s>')
+def search1(s):
+    db_sess = create_session()
+    recept = db_sess.query(Recept).all()
+    sp = []
+    for i in recept:
+        if s in i.name or s in i.text:
+            sp.append(i)
+    return render_template('search1.html', title=f'Результаты поиска - {len(sp)} результатов', sp=sp)
 
 
 @app.errorhandler(404)

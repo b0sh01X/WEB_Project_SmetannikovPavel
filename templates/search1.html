@@ -1,0 +1,14 @@
+{% extends "baze.html" %}
+
+{% block content %}
+<h1>Результаты поиска:</h1>
+{% for i in sp %}
+    <div class="alert alert-dark" role="alert">
+        <h1>{{ i.name }}</h1>
+        <div class="alert alert-info" role="alert">
+            {{ i.text }}
+        </div>
+        <p>Автор: {{ i.autor }}</p>
+    </div>
+{% endfor %}
+{% endblock %}
