@@ -7,6 +7,7 @@
     </div>
 {% elif current_user.is_authenticated %}
     <h1>Ваш профиль:</h1>
+    <h5>ID: {{ current_user.id }}</h5>
     <h5>Имя: {{ current_user.name }}</h5>
     <h5>Логин: {{ current_user.login }}</h5>
 {% endif %}

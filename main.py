@@ -3,6 +3,7 @@ from flask_login import current_user, login_required, logout_user, login_user, L
 from data.db_session import create_session, global_init
 from data.recept import Recept
 from data.users import User
+from data.catalog import Catalog
 from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.search import SearchForm
@@ -104,6 +105,13 @@ def search1(s):
         if s in i.name or s in i.text:
             sp.append(i)
     return render_template('search1.html', title=f'Результаты поиска - {len(sp)} результатов', sp=sp)
+
+
+@app.route('/catalog')
+def catalog():
+    db_sess = create_session()
+    request = db_sess.query(Catalog).all()
+    return render_template('catalog.html', title='Каталог', request=request)
 
 
 @app.errorhandler(404)

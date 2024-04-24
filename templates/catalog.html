@@ -1,0 +1,8 @@
+{% extends "baze.html" %}
+
+{% block content %}
+<h1>Каталог:</h1>
+{% for i in request %}
+    <h5><a href="/catalog/{{ i.link }}">{{ i.name }}</a></h5>
+{% endfor %}
+{% endblock %}
