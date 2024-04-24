@@ -4,6 +4,7 @@ from data.db_session import create_session, global_init
 from data.recept import Recept
 from data.users import User
 from data.catalog import Catalog
+from forms.add import AddForm
 from forms.register import RegisterForm
 from forms.login import LoginForm
 from forms.search import SearchForm
@@ -105,6 +106,23 @@ def search1(s):
         if s in i.name or s in i.text:
             sp.append(i)
     return render_template('search1.html', title=f'Результаты поиска - {len(sp)} результатов', sp=sp)
+
+
+@app.route('/add', methods=['GET', 'POST'])
+@login_required
+def add():
+    form = AddForm()
+    if form.validate_on_submit():
+        db_sess = create_session()
+        recept = Recept(name=form.name.data,
+                        text=form.text.data,
+                        reg=form.reg.data)
+        recept.autor = current_user.id
+        recept.catalog_id = db_sess.query(Catalog).filter(Catalog.name == form.catalog.data).first()
+        db_sess.add(recept)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('add.html', title='Добавление рецепта', form=form)  #TODO раскрывающийся список с типом блюда
 
 
 @app.route('/catalog')
