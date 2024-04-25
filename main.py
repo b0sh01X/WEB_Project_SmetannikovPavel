@@ -32,6 +32,12 @@ def index():
 def glav(s):
     db_sess = create_session()
     request = db_sess.query(Recept).all()
+    req = []
+    for i in request:
+        db_sess = create_session()
+        user = db_sess.query(User).filter(User.id == i.autor).first()
+        i.autor = user.name
+        req.append(i)
     if s == 'old':
         sorti = 'Более старые'
     elif s == 'new':
@@ -39,7 +45,7 @@ def glav(s):
         request.reverse()
     else:
         return '<h1>Неверная сортировка<h1>', 404
-    return render_template('main.html', title='Главная страница', sorti=sorti, request=request)
+    return render_template('main.html', title='Главная страница', sorti=sorti, request=req)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -105,7 +111,13 @@ def search1(s):
     for i in recept:
         if s in i.name or s in i.text:
             sp.append(i)
-    return render_template('search1.html', title=f'Результаты поиска - {len(sp)} результатов', sp=sp)
+    req = []
+    for i in sp:
+        db_sess = create_session()
+        user = db_sess.query(User).filter(User.id == i.autor).first()
+        i.autor = user.name
+        req.append(i)
+    return render_template('search1.html', title=f'Результаты поиска - {len(req)} результатов', sp=req)
 
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -118,7 +130,8 @@ def add():
                         text=form.text.data,
                         reg=form.reg.data)
         recept.autor = current_user.id
-        recept.catalog_id = db_sess.query(Catalog).filter(Catalog.name == form.catalog.data).first()
+        print(form.catalog, form.name, form.text)
+        recept.catalog_id = db_sess.query(Catalog).filter(Catalog.name == form.catalog.data).first().id
         db_sess.add(recept)
         db_sess.commit()
         return redirect('/')
@@ -134,7 +147,18 @@ def catalog():
 
 @app.route('/catalog/<s>')
 def catalog1(s):
-    return render_template('catalog1.html', title='Список блюд')
+    db_sess = create_session()
+    catalog = db_sess.query(Catalog).filter(Catalog.link == s).first()
+    if catalog:
+        sp = db_sess.query(Recept).filter(Recept.catalog_id == catalog.id).all()
+        req = []
+        for i in sp:
+            db_sess = create_session()
+            user = db_sess.query(User).filter(User.id == i.autor).first()
+            i.autor = user.name
+            req.append(i)
+        return render_template('catalog1.html', title='Список блюд', req=req)
+    return '<h1>Список не найден</h1>', 404
 
 
 @app.errorhandler(404)

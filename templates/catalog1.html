@@ -2,5 +2,13 @@
 
 {% block content %}
 <h1>Список блюд по этому разделу:</h1>
-
+{% for i in req %}
+    <div class="alert alert-dark" role="alert">
+        <h1>{{ i.name }}</h1>
+        <div class="alert alert-info" role="alert">
+            {{ i.text }}
+        </div>
+        <p>Автор: {{ i.autor }}</p>
+    </div>
+{% endfor %}
 {% endblock %}
