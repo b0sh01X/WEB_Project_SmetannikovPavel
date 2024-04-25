@@ -122,7 +122,7 @@ def add():
         db_sess.add(recept)
         db_sess.commit()
         return redirect('/')
-    return render_template('add.html', title='Добавление рецепта', form=form)  #TODO раскрывающийся список с типом блюда
+    return render_template('add.html', title='Добавление рецепта', form=form)
 
 
 @app.route('/catalog')
@@ -130,6 +130,11 @@ def catalog():
     db_sess = create_session()
     request = db_sess.query(Catalog).all()
     return render_template('catalog.html', title='Каталог', request=request)
+
+
+@app.route('/catalog/<s>')
+def catalog1(s):
+    return render_template('catalog1.html', title='Список блюд')
 
 
 @app.errorhandler(404)
