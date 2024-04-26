@@ -45,7 +45,16 @@ def glav(s):
         request.reverse()
     else:
         return '<h1>Неверная сортировка<h1>', 404
-    return render_template('main.html', title='Главная страница', sorti=sorti, request=req)
+    flag = True
+    if not current_user.is_authenticated:
+        sp = []
+        for i in req:
+            if i.reg == False:
+                sp.append(i)
+        flag = False
+    if flag:
+        sp = req[:]
+    return render_template('main.html', title='Главная страница', sorti=sorti, request=sp)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -91,6 +100,7 @@ def logout():
 
 
 @app.route('/profile')
+@login_required
 def profile():
     return render_template('profile.html')
 
@@ -117,7 +127,16 @@ def search1(s):
         user = db_sess.query(User).filter(User.id == i.autor).first()
         i.autor = user.name
         req.append(i)
-    return render_template('search1.html', title=f'Результаты поиска - {len(req)} результатов', sp=req)
+    flag = True
+    if not current_user.is_authenticated:
+        sp = []
+        for i in req:
+            if i.reg == False:
+                sp.append(i)
+        flag = False
+    if flag:
+        sp = req[:]
+    return render_template('search1.html', title=f'Результаты поиска - {len(req)} результатов', sp=sp)
 
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -157,7 +176,16 @@ def catalog1(s):
             user = db_sess.query(User).filter(User.id == i.autor).first()
             i.autor = user.name
             req.append(i)
-        return render_template('catalog1.html', title='Список блюд', req=req)
+        flag = True
+        if not current_user.is_authenticated:
+            sp = []
+            for i in req:
+                if i.reg == False:
+                    sp.append(i)
+            flag = False
+        if flag:
+            sp = req[:]
+        return render_template('catalog1.html', title='Список блюд', req=sp)
     return '<h1>Список не найден</h1>', 404
 
 
@@ -169,6 +197,11 @@ def not_found_error(error):
 @app.errorhandler(500)
 def not_found_error(error):
     return render_template('err500.html', title='Внутренняя ошибка'), 500
+
+
+@app.errorhandler(401)
+def not_found_error(error):
+    return render_template('err401.html', title='Авторизуйтесь!'), 401
 
 
 def main():
